@@ -140,9 +140,35 @@ int numE(Map g, TransportID type)
 // Returns 0 if no direct connection (i.e. not adjacent in graph)
 int connections(Map g, LocationID start, LocationID end, TransportID type[])
 {
+	// qwer
    assert(g != NULL);
-   // TODO: complete this fucntion
-   return 0;  // to keep the compiler happy
+	int i = 0;
+	VList curr = g->connections[start];
+//	printf("start %d, end %d\n", start, end);
+//	printf("start: %s, end %s \n", idToName(start), idToName(end));
+//	printf("Start curr: %d \n", g->connections[start]->v);
+	while( curr != NULL ){
+//		printf("curr type %d\n", curr->type);
+//		printf("curr value %d, curr end %d\n", curr->v, g->connections[end]->v);
+		if( curr->v == end ){
+//			printf("Sub hit \n");
+			type[i] = curr->type;
+			i++;
+		}
+		if( curr->type == BOAT ){
+			VList sea = g->connections[curr->v];
+			while( sea != NULL ){
+				if( sea->v == end ){
+					type[i] = BOAT;
+					i++;
+				}
+				sea = sea->next;
+			}
+		}
+		curr=curr->next;
+	}
+//  	printf("%d\n", i);
+	return i;  // to keep the compiler happy
 }
 
 // Add edges to Graph representing map of Europe
