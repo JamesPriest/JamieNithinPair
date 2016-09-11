@@ -1,3 +1,4 @@
+// Map.c by Jamie Priest and Nithin Sudhir
 // Map.c ... implementation of Map type
 // (a specialised version of the Map ADT)
 // You can change this as much as you want
