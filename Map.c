@@ -144,6 +144,7 @@ int connections(Map g, LocationID start, LocationID end, TransportID type[])
 	// qwer
    assert(g != NULL);
 	int i = 0;
+  if(start==end)return i; //no transport necessary
 	VList curr = g->connections[start];
 //	printf("start %d, end %d\n", start, end);
 //	printf("start: %s, end %s \n", idToName(start), idToName(end));
