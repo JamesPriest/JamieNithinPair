@@ -17,6 +17,7 @@
 
 void setFirstURL(char *, char *);
 void normalise(char *, char *, char *, char *, int);
+void strlower(char *);
 
 int main(int argc, char **argv)
 {
@@ -63,9 +64,29 @@ int main(int argc, char **argv)
 		fprintf(stderr,"Couldn't open %s\n", next);
 		exit(1);
 	}
-	while(!url_feof(handle)) {
+	// New code
+
+	// Make the web
+	Graph web = newGraph( maxURLs );
+	// Create stack
+	Stack webStack = newStack();
+	// Add firstURL to the ToDo list
+	pushOnto( webStack, firstURL );
+
+	// Initialise set of seen URL's (pointer to a list of pointers each will be a string ?
+	char ** a[maxURLs][BUFSIZE];
+
+	// while ( toDo list not empty and graph not filled )
+	while( ( emptyStack( webStack ) == 0 ) && ( nVertices( web ) <= maxURLs ) ){
+		printf("Makes you think \n");
+	}
+
+
+	//
+	while(!url_feof(handle) ) {
 		url_fgets(buffer,sizeof(buffer),handle);
 		//fputs(buffer,stdout);
+		strlower(buffer);
 		int pos = 0;
 		char result[BUFSIZE];
 		memset(result,0,BUFSIZE);
@@ -98,4 +119,12 @@ void setFirstURL(char *base, char *first)
 		strcpy(first,base);
 		strcat(first,"/index.html");
 	}
+}
+
+// strlower(Str)
+// - set all chars in Str to lower-case
+void strlower(char *s)
+{
+	for ( ; *s != '\0'; s++)
+		*s = tolower(*s);
 }
