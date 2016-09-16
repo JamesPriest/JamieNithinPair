@@ -5,11 +5,39 @@
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
+#include "Map.h"
+
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
+typedef struct player {
+    unsigned char name;
+    unsigned char moveHi;
+    unsigned char moveLo;
+    unsigned char trap; //encounter for drac placed trap
+    unsigned char immVam; //encounter for drac place immvam, could be trap off date or vampire matrued for drac
+    unsigned char face_drac_or_drac_news;
+    unsigned char addition;
+}* Player;
+
+typedef struct hunter{
+    int health;
+    int locationID;
+
+}* Hunter;
+
+typedef struct dracular {
+    int health;
+    int locationID;
+}* Dracular;
+
 struct gameView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    Round round; //the round of current state
+    int turn; //current turn
+    int score;// overall score of the game
+    Player last;
+    Dracular dra;
+    Hunter hunter[4];
+    Map map;
 };
      
 
@@ -17,16 +45,26 @@ struct gameView {
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    GameView gameView = malloc(sizeof(struct gameView));
-    gameView->hello = 42;
-    return gameView;
+    GameView g = malloc(sizeof(struct gameView));
+    g->last = (Player)pastPlays;
+    g->dra = calloc(1,sizeof(struct dracular));
+    g->map = newMap();
+    int i;
+    for (i = 0; i < 4; i++) {
+        g->hunter[i] = calloc(1, sizeof(struct hunter));
+    }
+    for (i = 0; g->last->name != 0; g->last++) i++;
+    g->last--;
+    g->turn = i;
+    g->round = g->turn/5;
+
+    return g;
 }
      
      
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
-    //COMPLETE THIS IMPLEMENTATION
     free( toBeDeleted );
 }
 
@@ -36,36 +74,43 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->round;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    switch (currentView->last->name) {
+        case 'G': return PLAYER_DR_SEWARD;
+        case 'S': return PLAYER_VAN_HELSING;
+        case 'H': return PLAYER_MINA_HARKER;
+        case 'M': return PLAYER_DRACULA;
+        default: return PLAYER_LORD_GODALMING;
+    }
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    switch (player) {
+        case PLAYER_DRACULA: return currentView->dra->health;
+        default: return currentView->hunter[player]->health;
+    }
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    switch (player) {
+        case PLAYER_DRACULA: return currentView->dra->locationID;
+        default: return currentView->hunter[player]->locationID;
+    }
 }
 
 //// Functions that return information about the history of the game
