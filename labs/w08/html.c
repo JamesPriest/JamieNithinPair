@@ -21,12 +21,12 @@ and copy the URL into the result buffer, which is also an input
 argument. This function is the main component of the HTML parser
 provided as an utility for the TinySearchEngine. This function
 is designed such that it is meant to be repeatedly called to
-extract URLs from the HTML one at a time, starting from the 
+extract URLs from the HTML one at a time, starting from the
 beginning of the HTML and terminating when the end of the HTML
 is reached. The return value of this function is meant for the
 repeated calls of this function; the real return value is the
 third input argument, which is the result buffer, in which a
-new URL will be written if one is found. This function can 
+new URL will be written if one is found. This function can
 handle normal absolute and relative URLs generally  found in
 the <a href=""> tags; however, more extreme cases, like this
 <a href="../../../a.txt">, are not currently being extracted.
@@ -84,11 +84,11 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
   //! Find the URL it the HTML tag. They usually look like <a href="www.cs.dartmouth.edu">
   //! We try to find the quote mark in order to find the URL inside the quote mark.
   if (c) {
-    
+
     // Added by Matt Mukerjee
     // check for equals first... some HTML tags don't have quotes...or use single quotes instead
     p1 = strchr(&(html[pos+1]), '=');
-    
+
     if ((!p1) || (*(p1-1) == 'e') || ((p1 - html - pos) > 10)) {
       // keep going...
       return GetNextURL(html,urlofthispage,result,pos+1);
@@ -96,7 +96,7 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
     if (*(p1+1) == '\"' || *(p1+1) == '\'')
       p1++;
     // added by Matt Mukerjee
-    p1++;    
+    p1++;
     // added by Matt Mukerjee
     p2 = strpbrk(p1, "\'\">");
     if (!p2) {
@@ -105,7 +105,7 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
       return GetNextURL(html,urlofthispage,result,pos+1);
     }
     if (*p1 == '#') { // Why bother returning anything here....recursively keep going...
-      // Added by Matt Mukerjee      
+      // Added by Matt Mukerjee
       return GetNextURL(html,urlofthispage,result,pos+1);
     }
     if (!strncmp(p1, "mailto:",7))
@@ -117,10 +117,10 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
     } else {
       //! We find a URL. HTML is a terrible standard. So there are many ways to present a URL.
       if (p1[0] == '.') {
-        //! Some URLs are like <a href="../../../a.txt"> I cannot handle this. 
+        //! Some URLs are like <a href="../../../a.txt"> I cannot handle this.
 	// again...probably good to recursively keep going..
 	// NEW
-        
+
         return GetNextURL(html,urlofthispage,result,pos+1);
 	// /NEW
       }
@@ -132,7 +132,7 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
         strcpy(result, urlofthispage);
         result[i] = 0;
         strncat(result, p1, (p2 - p1));
-        return (int)(p2 - html + 1);        
+        return (int)(p2 - html + 1);
       } else {
         //! the URL is a absolute path.
         len = strlen(urlofthispage);
@@ -163,7 +163,7 @@ int GetNextURL(char* html, char* urlofthispage, char* result, int pos)
         return (int)(p2 - html + 1);
       }
     }
-  }    
+  }
   return -1;
 }
 
@@ -278,7 +278,7 @@ int NormalizeURL(char* URL)
         ||(!strncmp((URL + i), ".php", 4))
         ||(!strncmp((URL + i), ".jsp", 4))
         ) {
-      len = len; // do nothing.
+      //len = len; // do nothing.
     } else {
       return 0; // bad type
     }
@@ -312,7 +312,7 @@ Input: string_buffer
     DONE
 (3) Overwrite the input buffer with the target buffer
 (4) Release targer buffer
-    
+
 *****
 
 */
