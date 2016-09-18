@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <curl/curl.h>
-#include <string.h>
 #include "stack.h"
 #include "queue.h"
 #include "set.h"
@@ -42,79 +41,76 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Usage: %s BaseURL MaxURLs\n",argv[0]);
 		exit(1);
 	}
-
-	//initialise set of Seen URLs
-	Set seen = newSet();
-
-	//initialise Graph to hold up to maxURLs
-	Graph web = newGraph(maxURLs);
-
-	//add firstURL to the ToDo list
-	Queue wait = newQueue();
-	enterQueue(wait,firstURL);
-
-	// using the stack ADT for DFS
-	// Stack wait = newStack();
-	// pushOnto( wait, firstURL );
-
-	//while (ToDo list not empty and Graph not filled)
-	while(!emptyQueue(wait) && nVertices(web) != maxURLs){
-		//grab Next URL from ToDo list
-		strcpy(next, leaveQueue(wait));
-		// strcpy(next, popFrom(wait));
-		if (!(handle = url_fopen(next, "r"))) {
-			//if (not allowed) continue
-			fprintf(stderr,"Couldn't open %s\n", next);
-			continue;//exit(1);
+	char approval;
+	if (strstr(argv[1],"unsw.edu.au")==NULL) {
+		printf("WARNING: Running webcrawlers may be illegal on this domain, do you wish to continue\n Please type 'y' or 'n'\n");
+		scanf("%c", &approval);
+		if (approval == 'y') {
+// warned you
+		} else {
+			return EXIT_SUCCESS;
 		}
-		//foreach line in the opened URL {
-		while(!url_feof(handle)) {
-			url_fgets(buffer,sizeof(buffer),handle); //get line of input
-			//fputs(buffer,stdout);
-			int pos = 0; //position of the web pointer
-			char result[BUFSIZE];// used to store url found in the current html
-			memset(result,0,BUFSIZE);
-			//foreach URL on that line
-			while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
-				if( strstr( result, "unsw" ) == NULL  ) continue;
-				//printf("Found: '%s'\n",result);
+	}
 
-				//if (this URL not Seen already) {
-	            //add it to the Seen set
-	            //add it to the ToDo list
-	            if (!(isElem(seen,result))){
-	            	insertInto(seen,result);//make the url found into seen list
-					enterQueue(wait,result);
-	            }
-				//if (Graph not filled or both URLs in Graph)
-	            //add an edge from Next to this URL
-				if (!isConnected(web,next,result)) addEdge(web,next,result);
-				memset(result,0,BUFSIZE);
+		Set seen = newSet();//initialise set of Seen URLs
+		Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
+		Queue wait = newQueue(); //add firstURL to the ToDo list
+		enterQueue(wait,firstURL);
+
+		while(!emptyQueue(wait) && nVertices(web) != maxURLs){
+			strcpy(next, leaveQueue(wait));
+			// strcpy(next, popFrom(wait));
+			if (!(handle = url_fopen(next, "r"))) {
+				fprintf(stderr,"Couldn't open %s\n", next);
+				continue;
 			}
+			//foreach line in the opened URL {
+			while(!url_feof(handle)) {
+				url_fgets(buffer,sizeof(buffer),handle); //get line of input
+				//fputs(buffer,stdout);
+				int pos = 0; //position of the web pointer
+				char result[BUFSIZE];// used to store url found in the current html
+				memset(result,0,BUFSIZE);
+				//foreach URL on that line
+				while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
+					if( strstr( result, "unsw" ) == NULL  ) continue;
+					//printf("Found: '%s'\n",result);
+
+					//if (this URL not Seen already) {
+		            //add it to the Seen set
+		            //add it to the ToDo list
+		            if (!(isElem(seen,result))){
+		            	insertInto(seen,result);//make the url found into seen list
+									enterQueue(wait,result);
+		            }
+					//if (Graph not filled or both URLs in Graph)
+		            //add an edge from Next to this URL
+					if (!isConnected(web,next,result)) addEdge(web,next,result);
+					memset(result,0,BUFSIZE);
+				}
+			}
+			url_fclose(handle);
+			sleep(1);
 		}
-		url_fclose(handle);
-		sleep(1);
+
+	//	showGraph(web,1);
+		showGraph(web,2);
+		return 0;
 	}
 
-//	showGraph(web,1);
-	showGraph(web,2);
-	return 0;
-}
-
-void setFirstURL(char *base, char *first)
-{
-	char *c;
-	if ((c = strstr(base, "/index.html")) != NULL) {
-		strcpy(first,base);
-		*c = '\0';
+	void setFirstURL(char *base, char *first) {
+		char *c;
+		if ((c = strstr(base, "/index.html")) != NULL) {
+			strcpy(first,base);
+			*c = '\0';
+		}
+		else if (base[strlen(base)-1] == '/') {
+			strcpy(first,base);
+			strcat(first,"index.html");
+			base[strlen(base)-1] = '\0';
+		}
+		else {
+			strcpy(first,base);
+			strcat(first,"/index.html");
+		}
 	}
-	else if (base[strlen(base)-1] == '/') {
-		strcpy(first,base);
-		strcat(first,"index.html");
-		base[strlen(base)-1] = '\0';
-	}
-	else {
-		strcpy(first,base);
-		strcat(first,"/index.html");
-	}
-}
