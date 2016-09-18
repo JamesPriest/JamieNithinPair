@@ -32,6 +32,20 @@ int main(int argc, char **argv)
 
 	//make baseURL as input, and assign maxURLS
 	if (argc > 2) {
+		char approval;
+		if (strstr(argv[1],"unsw.edu.au")==NULL) {
+			printf("WARNING: Running webcrawlers may be illegal on this domain, do you wish to continue\n Please type 'y' or 'n'\n");
+			while( approval != 'y' || approval != 'n'){
+				scanf("%c", &approval);
+				if (approval == 'y') {
+			// warned you 			
+				break;
+				}
+				else if( approval == 'n'){
+					return EXIT_SUCCESS;
+				}
+			} 
+		}
 		strcpy(baseURL,argv[1]);
 		setFirstURL(baseURL,firstURL); //normalise url so it can be used
 		printf("%s\n",firstURL);
@@ -42,16 +56,7 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Usage: %s BaseURL MaxURLs\n",argv[0]);
 		exit(1);
 	}
-	char approval;
-	if (strstr(argv[1],"unsw.edu.au")==NULL) {
-		printf("WARNING: Running webcrawlers may be illegal on this domain, do you wish to continue\n Please type 'y' or 'n'\n");
-		scanf("%c", &approval);
-		if (approval == 'y') {
-// warned you
-		} else {
-			return EXIT_SUCCESS;
-		}
-	}
+
 
 		Set seen = newSet();//initialise set of Seen URLs
 		Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
