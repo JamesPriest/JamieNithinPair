@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 				memset(result,0,BUFSIZE);
 				//foreach URL on that line
 				while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
-					if( strstr( result, "unsw" ) == NULL  ) continue;
+					if( strstr( result, "unsw.edu.au" ) == NULL  ) continue;
 					//printf("Found: '%s'\n",result);
 
 					//if (this URL not Seen already) {
