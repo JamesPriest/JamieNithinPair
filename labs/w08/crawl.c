@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <curl/curl.h>
+#include <string.h>
 #include "stack.h"
 #include "queue.h"
 #include "set.h"
