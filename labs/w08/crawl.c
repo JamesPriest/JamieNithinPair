@@ -1,8 +1,7 @@
 // crawl.c ... build a graph of part of the web
 // Written by John Shepherd, September 2015
 // Uses the cURL library and functions by Vincent Sanders <vince@kyllikki.org>
-//./crawl  http://www.cse.unsw.edu.au/~cs1927/16s2/mini-web/  30
-
+// Code by Jamie Priest and Nithin Sudhir
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -42,24 +41,17 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	//initialise set of Seen URLs
-	Set seen = newSet();
-
-	//initialise Graph to hold up to maxURLs
-	Graph web = newGraph(maxURLs);
-
-	//add firstURL to the ToDo list
-	Queue wait = newQueue();
+	Set seen = newSet();//initialise set of Seen URLs
+	Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
+	Queue wait = newQueue(); //add firstURL to the ToDo list
 	enterQueue(wait,firstURL);
 
-	//while (ToDo list not empty and Graph not filled)
+
 	while(!emptyQueue(wait) && nVertices(web) != maxURLs){
-		//grab Next URL from ToDo list
 		strcpy(next, leaveQueue(wait));
 		if (!(handle = url_fopen(next, "r"))) {
-			//if (not allowed) continue
 			fprintf(stderr,"Couldn't open %s\n", next);
-			continue;//exit(1);
+			continue;
 		}
 
 		//foreach line in the opened URL {
@@ -78,7 +70,7 @@ int main(int argc, char **argv)
 	            //add it to the ToDo list
 	            if (!(isElem(seen,result))){
 	            	insertInto(seen,result);//make the url found into seen list
-					enterQueue(wait,result);
+								enterQueue(wait,result);
 	            }
 				//if (Graph not filled or both URLs in Graph)
 	            //add an edge from Next to this URL
