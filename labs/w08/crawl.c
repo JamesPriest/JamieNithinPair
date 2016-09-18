@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <curl/curl.h>
+#include <string.h>
 #include "stack.h"
 #include "queue.h"
 #include "set.h"
@@ -52,16 +53,20 @@ int main(int argc, char **argv)
 	Queue wait = newQueue();
 	enterQueue(wait,firstURL);
 
+	// using the stack ADT for DFS
+	// Stack wait = newStack();
+	// pushOnto( wait, firstURL );
+
 	//while (ToDo list not empty and Graph not filled)
 	while(!emptyQueue(wait) && nVertices(web) != maxURLs){
 		//grab Next URL from ToDo list
 		strcpy(next, leaveQueue(wait));
+		// strcpy(next, popFrom(wait));
 		if (!(handle = url_fopen(next, "r"))) {
 			//if (not allowed) continue
 			fprintf(stderr,"Couldn't open %s\n", next);
 			continue;//exit(1);
 		}
-
 		//foreach line in the opened URL {
 		while(!url_feof(handle)) {
 			url_fgets(buffer,sizeof(buffer),handle); //get line of input
@@ -71,6 +76,7 @@ int main(int argc, char **argv)
 			memset(result,0,BUFSIZE);
 			//foreach URL on that line
 			while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
+				if( strstr( result, "unsw" ) == NULL  ) continue;
 				//printf("Found: '%s'\n",result);
 
 				//if (this URL not Seen already) {
@@ -90,7 +96,7 @@ int main(int argc, char **argv)
 		sleep(1);
 	}
 
-	showGraph(web,1);
+//	showGraph(web,1);
 	showGraph(web,2);
 	return 0;
 }

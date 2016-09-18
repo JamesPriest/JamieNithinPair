@@ -6,7 +6,7 @@ LIBS=url_file.o html.o set.o queue.o graph.o stack.o
 TESTS=ts tq tk tg
 
 crawl : crawl.o $(LIBS)
-	gcc -g -o crawl crawl.o $(LIBS) -lcurl
+	gcc -g -o crawl crawl.o $(LIBS) -lcurl -gdwarf-2
 
 tests : $(TESTS)
 
