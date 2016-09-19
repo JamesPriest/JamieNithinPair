@@ -134,6 +134,37 @@ int numE(Map g, TransportID type)
     return nE;
 }
 
+// Returns no. of direct connections
+// Returns array with connection type
+// Return 0 if no direct connnection
+int connections(Map g, LocationID start, LocationID end, TransportID type[])
+{
+        // qwer
+   assert(g != NULL);
+        int i = 0;
+  if(start==end)return i; //no transport necessary
+        VList curr = g->connections[start];
+        while( curr != NULL ){
+                if( curr->v == end ){
+                        type[i] = curr->type;
+                        i++;
+                }
+                if( curr->type == BOAT ){
+                        VList sea = g->connections[curr->v];
+                        while( sea != NULL ){
+                                if( sea->v == end ){
+                                        type[i] = BOAT;
+                                        i++;
+                                }
+                                sea = sea->next;
+                        }
+                }
+                curr=curr->next;
+        }
+        return i;  // to keep the compiler happy
+}
+
+
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
 {
