@@ -83,14 +83,14 @@ int main(int argc, char **argv)
 					//printf("Found: '%s'\n",result);
 
 					//if (this URL not Seen already) {
-		            //add it to the Seen set
-		            //add it to the ToDo list
-		            if (!(isElem(seen,result))){
-		            	insertInto(seen,result);//make the url found into seen list
-									enterQueue(wait,result);
-		            }
+		        		    //add it to the Seen set
+			            	//add it to the ToDo list
+				            if (!(isElem(seen,result))){
+				       	     	insertInto(seen,result);//make the url found into seen list
+						enterQueue(wait,result);
+				            }
 					//if (Graph not filled or both URLs in Graph)
-		            //add an edge from Next to this URL
+				            //add an edge from Next to this URL
 					if (!isConnected(web,next,result)) addEdge(web,next,result);
 					memset(result,0,BUFSIZE);
 				}

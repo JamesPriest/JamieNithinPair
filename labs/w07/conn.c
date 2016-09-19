@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	n = connections(europe, id1, id2, t);
 	if (n == 0)
 		printf("No direct connection\n");
-	else {
+	`	else {
 		for (i = 0; i < n; i++) {
 			switch (t[i]) {
 			case ROAD: printf("Road connection\n"); break;
