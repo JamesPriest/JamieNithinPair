@@ -37,14 +37,15 @@ int main(int argc, char **argv)
 			while( approval != 'y' || approval != 'n'){
 				scanf("%c", &approval);
 				if (approval == 'y') {
-			// warned you 			
+			// warned you
 				break;
 				}
 				else if( approval == 'n'){
 					return EXIT_SUCCESS;
 				}
-			} 
+			}
 		}
+
 		strcpy(baseURL,argv[1]);
 		setFirstURL(baseURL,firstURL); //normalise url so it can be used
 		printf("%s\n",firstURL);
@@ -56,6 +57,10 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
+<<<<<<< Updated upstream
+=======
+//<<<<<<< HEAD
+>>>>>>> Stashed changes
 	Set seen = newSet();//initialise set of Seen URLs
 	Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
 	Queue wait = newQueue(); //add firstURL to the ToDo list
@@ -68,12 +73,47 @@ int main(int argc, char **argv)
 			fprintf(stderr,"Couldn't open %s\n", next);
 			continue;
 		}
+<<<<<<< Updated upstream
 		//foreach line in the opened URL {
+=======
+//=======
+//>>>>>>> origin/master
+
+		Set seen = newSet();//initialise set of Seen URLs
+		Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
+		Queue wait = newQueue(); //add firstURL to the ToDo list
+		enterQueue(wait,firstURL);
+
+//<<<<<<< HEAD
+				//if (this URL not Seen already) {
+	            //add it to the Seen set
+	            //add it to the ToDo list
+	            if (!(isElem(seen,result))){
+	            	insertInto(seen,result);//make the url found into seen list
+								enterQueue(wait,result);
+	            }
+				//if (Graph not filled or both URLs in Graph)
+	            //add an edge from Next to this URL
+				if (!isConnected(web,next,result)) addEdge(web,next,result);
+//=======
+		while(!emptyQueue(wait) && nVertices(web) != maxURLs){
+			strcpy(next, leaveQueue(wait));
+			// strcpy(next, popFrom(wait));
+			if (!(handle = url_fopen(next, "r"))) {
+				fprintf(stderr,"Couldn't open %s\n", next);
+				continue;
+			}
+			//foreach line in the opened URL {
+>>>>>>> Stashed changes
 			while(!url_feof(handle)) {
 				url_fgets(buffer,sizeof(buffer),handle); //get line of input
 				//fputs(buffer,stdout);
 				int pos = 0; //position of the web pointer
 				char result[BUFSIZE];// used to store url found in the current html
+<<<<<<< Updated upstream
+=======
+//>>>>>>> origin/master
+>>>>>>> Stashed changes
 				memset(result,0,BUFSIZE);
 				//foreach URL on that line
 				while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
