@@ -56,7 +56,6 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-<<<<<<< HEAD
 	Set seen = newSet();//initialise set of Seen URLs
 	Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
 	Queue wait = newQueue(); //add firstURL to the ToDo list
@@ -69,40 +68,12 @@ int main(int argc, char **argv)
 			fprintf(stderr,"Couldn't open %s\n", next);
 			continue;
 		}
-=======
->>>>>>> origin/master
-
-		Set seen = newSet();//initialise set of Seen URLs
-		Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
-		Queue wait = newQueue(); //add firstURL to the ToDo list
-		enterQueue(wait,firstURL);
-
-<<<<<<< HEAD
-				//if (this URL not Seen already) {
-	            //add it to the Seen set
-	            //add it to the ToDo list
-	            if (!(isElem(seen,result))){
-	            	insertInto(seen,result);//make the url found into seen list
-								enterQueue(wait,result);
-	            }
-				//if (Graph not filled or both URLs in Graph)
-	            //add an edge from Next to this URL
-				if (!isConnected(web,next,result)) addEdge(web,next,result);
-=======
-		while(!emptyQueue(wait) && nVertices(web) != maxURLs){
-			strcpy(next, leaveQueue(wait));
-			// strcpy(next, popFrom(wait));
-			if (!(handle = url_fopen(next, "r"))) {
-				fprintf(stderr,"Couldn't open %s\n", next);
-				continue;
-			}
-			//foreach line in the opened URL {
+		//foreach line in the opened URL {
 			while(!url_feof(handle)) {
 				url_fgets(buffer,sizeof(buffer),handle); //get line of input
 				//fputs(buffer,stdout);
 				int pos = 0; //position of the web pointer
 				char result[BUFSIZE];// used to store url found in the current html
->>>>>>> origin/master
 				memset(result,0,BUFSIZE);
 				//foreach URL on that line
 				while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
@@ -126,7 +97,7 @@ int main(int argc, char **argv)
 			sleep(1);
 		}
 
-	//	showGraph(web,1);
+		showGraph(web,1);
 		showGraph(web,2);
 		return 0;
 	}
