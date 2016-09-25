@@ -98,8 +98,92 @@ void showGraph(Graph g, char **names)
 
 // find a path between two vertices using breadth-first traversal
 // only allow edges whose weight is less than "max"
+/*int findPath(Graph g, Vertex src, Vertex dest, int max, int *path ){
+	int pathLen = 0;
+
+	recursiveCall( g, src, dest, max, path );
+	
+	return pathLen;
+}
+
+void recursiveCall( Graph g, Vertex src, Vertex dest, int max, int *path ){
+	if( src == dest ){
+		path[0] = dest;
+	}
+	int i;	
+	for( i = 0; i < g->nV; i++ ){
+		if( (g->edges[src][i] <= max) ){
+			recursiveCall( g, i, dest, max, path++ );
+			path[0] = i;
+			return;			
+		}
+	}
+
+}*/
+
 int findPath(Graph g, Vertex src, Vertex dest, int max, int *path)
 {
-	assert(g != NULL);
-	return 0; // never find a path ... you need to fix this
+	int pathLen=1;
+	if( src == dest ){
+		path[0] = dest;
+		return pathLen;
+	}
+
+	int i = 0;
+	int j;
+	
+	int *prev = malloc(sizeof(int)*g->nV);
+	int *visited = malloc(sizeof(int)*g->nV);
+
+	for( j=0; j< g->nV; j++){
+		prev[j] = 0;
+		visited[j] = 0;
+	}
+
+	Queue v = newQueue();
+	QueueJoin( v, src );
+
+
+	while( !(QueueIsEmpty( v )) ){
+	//	showQueue( v );
+		Item topQueue = QueueLeave( v );
+		for( j = 0; j < g->nV; j++ ){
+			if( (g->edges[topQueue][j] <= max) && (visited[j] == 0) ){
+				visited[j] = 1;
+				prev[j] = topQueue;			
+				QueueJoin( v, j );
+			}
+		}
+	}
+
+	i = dest;
+	visited[0] = dest;
+	j=1;
+	while( i != src ){
+		visited[j] = prev[i];
+		j++;
+		i = prev[i];
+		pathLen++;
+		if( j > 41 ) return 0;
+	}
+	i=pathLen-1;
+//	printf("pathLen = %d", pathLen);
+	for( j = 0; j<pathLen; j++){
+		path[j] = visited[i];
+		i--; 
+	}
+	free(visited);
+	free(prev);
+	dropQueue( v ); 
+	return pathLen;
+}
+
+int inPath( Vertex node, int *path, int pathLen ){
+	int i;	
+	for( i=0; i<pathLen; i++ ){
+		if( path[i] == node ){
+			return 0;
+		}
+	}
+	return 1;
 }
