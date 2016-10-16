@@ -1,7 +1,8 @@
 // crawl.c ... build a graph of part of the web
 // Written by John Shepherd, September 2015
 // Uses the cURL library and functions by Vincent Sanders <vince@kyllikki.org>
-// Code by Jamie Priest and Nithin Sudhir
+//./crawl  http://www.cse.unsw.edu.au/~cs1927/16s2/mini-web/  30
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -30,8 +31,9 @@ int main(int argc, char **argv)
 	int  maxURLs; // number of urls are allowed in this ex
 
 	//make baseURL as input, and assign maxURLS
+	char approval = 'y';
+
 	if (argc > 2) {
-		char approval;
 		if (strstr(argv[1],"unsw.edu.au")==NULL) {
 			printf("WARNING: Running webcrawlers may be illegal on this domain, do you wish to continue\n Please type 'y' or 'n'\n");
 			while( approval != 'y' || approval != 'n'){
@@ -45,7 +47,6 @@ int main(int argc, char **argv)
 				}
 			}
 		}
-
 		strcpy(baseURL,argv[1]);
 		setFirstURL(baseURL,firstURL); //normalise url so it can be used
 		printf("%s\n",firstURL);
@@ -57,45 +58,12 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-<<<<<<< Updated upstream
-=======
-//<<<<<<< HEAD
->>>>>>> Stashed changes
-	Set seen = newSet();//initialise set of Seen URLs
-	Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
-	Queue wait = newQueue(); //add firstURL to the ToDo list
-	enterQueue(wait,firstURL);
-
-
-	while(!emptyQueue(wait) && nVertices(web) != maxURLs){
-		strcpy(next, leaveQueue(wait));
-		if (!(handle = url_fopen(next, "r"))) {
-			fprintf(stderr,"Couldn't open %s\n", next);
-			continue;
-		}
-<<<<<<< Updated upstream
-		//foreach line in the opened URL {
-=======
-//=======
-//>>>>>>> origin/master
 
 		Set seen = newSet();//initialise set of Seen URLs
 		Graph web = newGraph(maxURLs);//initialise Graph to hold up to maxURLs
 		Queue wait = newQueue(); //add firstURL to the ToDo list
 		enterQueue(wait,firstURL);
 
-//<<<<<<< HEAD
-				//if (this URL not Seen already) {
-	            //add it to the Seen set
-	            //add it to the ToDo list
-	            if (!(isElem(seen,result))){
-	            	insertInto(seen,result);//make the url found into seen list
-								enterQueue(wait,result);
-	            }
-				//if (Graph not filled or both URLs in Graph)
-	            //add an edge from Next to this URL
-				if (!isConnected(web,next,result)) addEdge(web,next,result);
-//=======
 		while(!emptyQueue(wait) && nVertices(web) != maxURLs){
 			strcpy(next, leaveQueue(wait));
 			// strcpy(next, popFrom(wait));
@@ -104,16 +72,11 @@ int main(int argc, char **argv)
 				continue;
 			}
 			//foreach line in the opened URL {
->>>>>>> Stashed changes
 			while(!url_feof(handle)) {
 				url_fgets(buffer,sizeof(buffer),handle); //get line of input
 				//fputs(buffer,stdout);
 				int pos = 0; //position of the web pointer
 				char result[BUFSIZE];// used to store url found in the current html
-<<<<<<< Updated upstream
-=======
-//>>>>>>> origin/master
->>>>>>> Stashed changes
 				memset(result,0,BUFSIZE);
 				//foreach URL on that line
 				while ((pos = GetNextURL(buffer, next, result, pos)) > 0) {
