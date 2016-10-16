@@ -1,0 +1,36 @@
+Test: ./tlab 5000 A L
+3114
+Test: ./tlab 5000 P L
+11
+Test: ./tlab 5000 R L
+15
+Test: ./tlab 5000 A A
+1886
+Test: ./tlab 5000 P A
+1115
+Test: ./tlab 5000 R A
+16
+Test: ./tlab 5000 A B
+61
+Test: ./tlab 5000 P B
+13
+Test: ./tlab 5000 R B
+13
+Test: ./tlab 5000 A R
+951
+Test: ./tlab 5000 P R
+674
+Test: ./tlab 5000 R R
+15
+Test: ./tlab 5000 A S
+23
+Test: ./tlab 5000 P S
+23
+Test: ./tlab 5000 R S
+22
+Test: ./tlab 5000 A V
+11
+Test: ./tlab 5000 P V
+12
+Test: ./tlab 5000 R V
+11

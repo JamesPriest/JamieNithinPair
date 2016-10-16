@@ -1,0 +1,33 @@
+#!/bin/sh
+
+size=5000
+
+cat /dev/null > data
+cat /dev/null > formattedResults
+
+for insert in L A B R S V
+do
+	for order in A P R 
+	do
+#		echo ""
+		echo "Test: ./tlab $size $order $insert" >> formattedResults
+		echo "Test: ./tlab $size $order $insert" >> data
+		echo "t" | ./tlab $size $order $insert | grep -v Tree > outputAll 
+#		echo "N to Build" >> data
+		cat outputAll | sed -e '2,10d' -e 's/.*compares = //' -e 's/, .*//' >> data
+#		echo "N to Build and Search" >> data
+		cat outputAll | sed -e '1,6d' -e '8,9d' -e 's/.*compares = //' -e 's/, .*//' >> data
+#		echo "N for intree search" >> data
+		cat outputAll | sed -e '1,2d' -e '4,9d' -e 's/.*for //' -e 's/ values.*//' >> data
+#		echo "N for notInTree search" >> data
+		cat outputAll | sed -e '1,4d' -e '6,9d' -e 's/.*for //' -e 's/ values.*//' >> data
+		echo "" >> data	
+		rm outputAll
+	done
+done
+
+python calculation
+rm data
+python formatting
+rm results
+rm formattedResults

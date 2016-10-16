@@ -1,0 +1,28 @@
+import math
+inputData = open('data', 'r')
+outputStream = open('results', 'w')
+results = []
+count = 0
+
+for i in inputData:
+	count += 1
+	results.append( i )
+#	for j in i:
+#		if(str.isdigit(j)):
+#			print(j)
+
+i = 0
+#print(results)
+#print('Count is ' + str(count) + "\n")
+while( i < count ):
+#	print( i )
+	build = int(results[1+i])
+	bands = int(results[2+i])
+	inTree = int(results[3+i])
+	notInTree = int(results[4+i])
+	average = (bands - build)/(inTree + notInTree)
+#	print(average)
+	outputStream.write(str(math.floor(average)))
+	outputStream.write('\n')
+	i += 6
+	

@@ -1,0 +1,25 @@
+file = open('formattedResults', 'r')
+otherfile = open('results', 'r')
+output = open('end', 'w')
+
+one = []
+two = []
+
+count = 0
+
+for i in file:
+	count += 1
+	one.append(i)
+
+for j in otherfile:
+	two.append(j)
+
+i = 0
+while i < count:
+	output.write(one[i])
+	output.write(two[i])
+	i+=1
+
+
+	
+
