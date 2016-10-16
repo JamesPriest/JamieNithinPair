@@ -167,7 +167,7 @@ Link insert(Link t, Item it)
 }
 
 Link insertAtRoot(Link t, Item it)
-{ 
+{
 	if (t == NULL) return newNode(it);
 	int diff = cmp(key(it), key(t->value));
 	if (diff == 0)
@@ -211,14 +211,14 @@ Link insertSplay(Link t, Item it)
 	int diff = cmp(v,key(t->value));
 	if (diff == 0)
 		t->value = it;
-	else if (diff < 0) { 
+	else if (diff < 0) {
 		if (t->left == NULL) {
 			t->left = newNode(it);
 			return t;
 		}
 		if (less(v,key(t->left->value))) {
 			t->left->left = insertSplay(t->left->left, it);
-			t = rotateR(t); 
+			t = rotateR(t);
 		} else {
 			t->left->right = insertSplay(t->left->right, it);
 			t->left = rotateL(t->left);
@@ -293,16 +293,16 @@ static Link searchSplay(Link t, Key k, int *found)
 	if (t == NULL) {
 		// item not found
 		*found = 0;
-		res = NULL;  
+		res = NULL;
 	}
 	else if (eq(key(t->value),k)) {
-		*found = 1; // item found, store true  
-		res =  t;  
+		*found = 1; // item found, store true
+		res =  t;
 	}
 	else if (less(k,key(t->value))) {
 		if (t->left == NULL){
 			*found = 0;// item not found
-			//res = rotateRight(t); 
+			//res = rotateRight(t);
 			res = t;
 		}
 		else if (eq(key(t->left->value),k)) {
@@ -320,7 +320,7 @@ static Link searchSplay(Link t, Key k, int *found)
 				t->left->right = searchSplay(t->left->right, k, found);
 				t->left = rotateL(t->left);
 			}
-			res = rotateR(t);   
+			res = rotateR(t);
 		}
 	}
 	else { // k > key(t->value)
@@ -337,7 +337,7 @@ static Link searchSplay(Link t, Key k, int *found)
 			if (less(key(t->right->value),k)) {
 				/* right-right */
 				t->right->right = searchSplay(t->right->right, k, found);
-				t = rotateL(t);   
+				t = rotateL(t);
 			}
 			else {
 				/* right-left */
@@ -411,6 +411,7 @@ Link rotateR(Link n1)
 {
 	if (n1 == NULL) return NULL;
 	Link n2 = n1->left;
+	n1->within->nrotates++;
 	if (n2 == NULL) return n1;
 	n1->left = n2->right;
 	n2->right = n1;
@@ -422,6 +423,7 @@ Link rotateL(Link n2)
 {
 	if (n2 == NULL) return NULL;
 	Link n1 = n2->right;
+	n2->within->nrotates++;
 	if (n1 == NULL) return n2;
 	n2->right = n1->left;
 	n1->left = n2;
@@ -496,9 +498,9 @@ int rprofile[MAX_HEIGHT];
 
 int gap = 3;  // gap between left and right nodes
 
-//used for printing next node in the same level, 
+//used for printing next node in the same level,
 //this is the x coordinate of the next char printed
-int print_next;    
+int print_next;
 
 //prints ascii tree for given Tree structure
 static void doShowTree(Link t)
