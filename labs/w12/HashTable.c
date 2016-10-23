@@ -60,11 +60,22 @@ void HashTableStats(HashTable ht)
 {
 	assert(ht != NULL);
 	printf("Hash Table Stats:\n");
-	printf("Number of slots = %d\n", ht->nslots); // TODO
-	printf("Number of items = %d\n", ht->nitems); // TODO
+	printf("Number of slots = %d\n", ht->nslots); 
+	printf("Number of items = %d\n", ht->nitems);
 	printf("Chain length distribution\n");
-	printf("%8s %8s\n","Length","#Chains");
-	// TODO .. rest of function to show length/freq pairs
+	printf("%8s %8s\n","Length","#Chains")	;
+	int length = ht->nitems;
+	int i;
+	int lengths[length];
+	for( i = 0; i < length; i++ ){
+		lengths[i] = 0;
+	}
+	for( i = 0; i < ht->nslots; i++){
+		lengths[ ListLength( ht->lists[i] ) ]++;
+	}
+	for( i = 0; i < ht->nitems; i++ ){
+		if( lengths[i] != 0 ) printf("%8d %8d\n", i, lengths[i]);	
+	}
 }
 
 // insert a new value into a HashTable
